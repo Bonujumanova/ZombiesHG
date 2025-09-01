@@ -80,6 +80,7 @@ while True:
         x_position = zombie_moves_left(x_position)
     screen.fill(COLOR_SKY_BLUE)
     screen.blit(BALD_ZOMBIE, (x_position, 100))
-    time.sleep(1)
+
 
     pygame.display.flip()
+    time.sleep(1)
