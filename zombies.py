@@ -21,10 +21,6 @@ BALD_ZOMBIE = pygame.transform.scale(
     BALD_ZOMBIE,
     (ZOMBIE_WIDTH, ZOMBIE_HEIGHT))
 ZOMBIES_SPEED: int = 5
-zombie_moving_right: bool = False
-zombie_moving_left: bool = False
-zombie_moving_up: bool = False
-zombie_moving_down: bool = False
 x_position: int = 100
 y_position: int = 100
 
