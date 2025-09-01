@@ -1,5 +1,3 @@
-import time
-
 import pygame
 import sys
 
@@ -7,9 +5,13 @@ pygame.init()
 # screen settings directory
 screen = pygame.display.set_mode((0, 0))
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600  #screen.get_size()
-COLOR_SKY_BLUE = (153, 204, 255)
+COLOR_SKY_BLUE: tuple[int, int, int] = (153, 204, 255)
 
-#ZOMBIES PARAMETERS'
+clock = pygame.time.Clock()
+fps: int = 60
+
+
+#ZOMBIES PARAMETERS
 ZOMBIE_WIDTH: int = 120
 ZOMBIE_HEIGHT: int = 200
 BALD_ZOMBIE = pygame.image.load(
@@ -26,29 +28,6 @@ zombie_moving_down: bool = False
 x_position: int = 100
 y_position: int = 100
 
-def zombie_moves_right(x: int) -> int:
-
-    # temporary variable(speed)
-    zombies_speed = 5
-    x += zombies_speed
-    return x
-
-def zombie_moves_left(x: int) -> int:
-    # speed
-    zombiees_speed = 5
-    x -= zombiees_speed
-    return x
-
-
-def zombie_moves_up(y: int) -> int:
-    y -= 5
-    return y
-
-
-def zombie_moves_down(y: int) -> int:
-    y += 5
-    return y
-
 
 
 while True:
@@ -57,30 +36,19 @@ while True:
             pygame.quit()
             sys.exit()
 
-        if event.type == pygame.KEYDOWN:
-
-            if event.key == pygame.K_RIGHT:
-                zombie_moving_right = True
-            elif event.key == pygame.K_LEFT:
-                x_position = zombie_moves_left(x_position)
-                zombie_moving_left = True
-            elif event.key == pygame.K_UP:
-                zombie_moving_up = True
-            elif event.key == pygame.K_DOWN:
-                zombie_moving_down = True
-        elif event.type == pygame.KEYUP:
-            zombie_moving_right: bool = False
-            zombie_moving_left: bool = False
-            zombie_moving_up: bool = False
-            zombie_moving_down: bool = False
+    pressed_keys = pygame.key.get_pressed()
+    if pressed_keys[pygame.K_LEFT]:
+        x_position  -= ZOMBIES_SPEED
+    elif pressed_keys[pygame.K_RIGHT]:
+        x_position += ZOMBIES_SPEED
+    elif pressed_keys[pygame.K_DOWN]:
+        y_position += ZOMBIES_SPEED
+    elif pressed_keys[pygame.K_UP]:
+        y_position -= ZOMBIES_SPEED
 
 
-
-    if zombie_moving_left:
-        x_position = zombie_moves_left(x_position)
     screen.fill(COLOR_SKY_BLUE)
-    screen.blit(BALD_ZOMBIE, (x_position, 100))
+    screen.blit(BALD_ZOMBIE, (x_position, y_position))
 
-
+    clock.tick(fps)
     pygame.display.flip()
-    time.sleep(1)
