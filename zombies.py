@@ -4,9 +4,10 @@ import sys
 pygame.init()
 # screen settings directory
 screen = pygame.display.set_mode((0, 0))
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600  #screen.get_size()
+SCREEN_WIDTH, SCREEN_HEIGHT = screen.get_size()
+print(SCREEN_WIDTH, SCREEN_HEIGHT)
 COLOR_SKY_BLUE: tuple[int, int, int] = (153, 204, 255)
-
+FIELD: int = 90
 clock = pygame.time.Clock()
 fps: int = 60
 
@@ -24,6 +25,21 @@ ZOMBIES_SPEED: int = 5
 x_position: int = 100
 y_position: int = 100
 
+vertical_velocity: int = 0
+gravity: int = 1
+
+#
+#Логика с прыжком пока не понятна, тк не знаю там будут препятствия либо платформы
+# нужно понять каким будет конечный y
+# def zombie_jumping(y: int, vertical_speed: int) -> int:
+#
+#     if vertical_speed < 30:
+#         vertical_speed += gravity
+#         y -= vertical_speed
+#     else:
+#         y = 100
+#         vertical_speed = 0
+#     return y
 
 
 while True:
@@ -34,13 +50,22 @@ while True:
 
     pressed_keys = pygame.key.get_pressed()
     if pressed_keys[pygame.K_LEFT]:
-        x_position  -= ZOMBIES_SPEED
+        if x_position > 0:
+            x_position  -= ZOMBIES_SPEED
     elif pressed_keys[pygame.K_RIGHT]:
-        x_position += ZOMBIES_SPEED
+        if x_position< SCREEN_WIDTH - ZOMBIE_WIDTH:
+            x_position += ZOMBIES_SPEED
     elif pressed_keys[pygame.K_DOWN]:
-        y_position += ZOMBIES_SPEED
+        if y_position < SCREEN_HEIGHT - ZOMBIE_HEIGHT - FIELD:
+            y_position += ZOMBIES_SPEED
     elif pressed_keys[pygame.K_UP]:
-        y_position -= ZOMBIES_SPEED
+        if y_position > 0:
+            y_position -= ZOMBIES_SPEED
+    # elif pressed_keys[pygame.K_SPACE]:
+    #     vertical_velocity -= 10
+    #     y_position= zombie_jumping(y_position, vertical_velocity)
+
+
 
 
     screen.fill(COLOR_SKY_BLUE)
