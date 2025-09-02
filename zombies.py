@@ -24,22 +24,15 @@ BALD_ZOMBIE = pygame.transform.scale(
 ZOMBIES_SPEED: int = 5
 x_position: int = 100
 y_position: int = 100
+is_player_jumping: bool = False
+y_last: int = 0
+# гравитация - пока не дошел до нуля идет идет прыжок вврех,/
+# когда гравитация равна нулю, y_position достигнет наивысшей точки в прыжки и затем начнет убавляться
+# gravity становится отрицательным, поэтому происходит увеличение y_position
+# пример, мяч подброшенный в воздух,с ускорением долетает до максимальной высоты, затем останавливается и
+# стремится вниз( начинает падать вниз с ускорением) из-за сил гравитации
+gravity: int = 15
 
-vertical_velocity: int = 0
-gravity: int = 1
-
-#
-#Логика с прыжком пока не понятна, тк не знаю там будут препятствия либо платформы
-# нужно понять каким будет конечный y
-# def zombie_jumping(y: int, vertical_speed: int) -> int:
-#
-#     if vertical_speed < 30:
-#         vertical_speed += gravity
-#         y -= vertical_speed
-#     else:
-#         y = 100
-#         vertical_speed = 0
-#     return y
 
 
 while True:
@@ -48,6 +41,12 @@ while True:
             pygame.quit()
             sys.exit()
 
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                if not is_player_jumping:
+                    is_player_jumping = True
+                    y_last = y_position
+
     pressed_keys = pygame.key.get_pressed()
     if pressed_keys[pygame.K_LEFT]:
         if x_position > 0:
@@ -55,15 +54,19 @@ while True:
     elif pressed_keys[pygame.K_RIGHT]:
         if x_position< SCREEN_WIDTH - ZOMBIE_WIDTH:
             x_position += ZOMBIES_SPEED
-    elif pressed_keys[pygame.K_DOWN]:
+    elif pressed_keys[pygame.K_DOWN] and not is_player_jumping:
         if y_position < SCREEN_HEIGHT - ZOMBIE_HEIGHT - FIELD:
             y_position += ZOMBIES_SPEED
-    elif pressed_keys[pygame.K_UP]:
+    elif pressed_keys[pygame.K_UP] and not is_player_jumping:
         if y_position > 0:
             y_position -= ZOMBIES_SPEED
-    # elif pressed_keys[pygame.K_SPACE]:
-    #     vertical_velocity -= 10
-    #     y_position= zombie_jumping(y_position, vertical_velocity)
+    if is_player_jumping:
+        y_position -= gravity
+        gravity -= 1
+
+        if y_position == y_last:
+            gravity = 15
+            is_player_jumping = False
 
 
 
