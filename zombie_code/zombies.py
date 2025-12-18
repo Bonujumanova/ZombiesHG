@@ -1,3 +1,5 @@
+import math
+
 import pygame
 import sys
 
@@ -5,8 +7,10 @@ pygame.init()
 # screen settings directory
 screen = pygame.display.set_mode((0, 0))
 SCREEN_WIDTH, SCREEN_HEIGHT = screen.get_size()
-print(SCREEN_WIDTH, SCREEN_HEIGHT)
+
 COLOR_SKY_BLUE: tuple[int, int, int] = (153, 204, 255)
+COLOR_GRASS_GREEN: tuple[int, int, int] = (86, 125, 70)
+
 FIELD: int = 90
 clock = pygame.time.Clock()
 fps: int = 60
@@ -16,26 +20,44 @@ fps: int = 60
 ZOMBIE_WIDTH: int = 120
 ZOMBIE_HEIGHT: int = 200
 BALD_ZOMBIE = pygame.image.load(
-    "/home/bonu/Documents/zombies_hg/images/zombie_picture/bald_zombie.png"
+    "/home/bonu/Documents/zombies_hg/images/platformer_assets/img/guy1.png"
 )
-BALD_ZOMBIE = pygame.transform.scale(
+BALD_ZOMBIE = BALD_ZOMBIE_LOOKS_LEFT = pygame.transform.scale(
     BALD_ZOMBIE,
     (ZOMBIE_WIDTH, ZOMBIE_HEIGHT))
+
+BALD_ZOMBIE_LOOKS_RIGHT = pygame.transform.flip(BALD_ZOMBIE_LOOKS_LEFT, True, False)
+
+
 ZOMBIES_SPEED: int = 5
 x_position: int = 100
 y_position: int = 100
 is_player_jumping: bool = False
 y_last: int = 0
-# гравитация - пока не дошел до нуля идет идет прыжок вврех,/
+# гравитация - пока не дошел до нуля идет прыжок вверх,
 # когда гравитация равна нулю, y_position достигнет наивысшей точки в прыжки и затем начнет убавляться
 # gravity становится отрицательным, поэтому происходит увеличение y_position
-# пример, мяч подброшенный в воздух,с ускорением долетает до максимальной высоты, затем останавливается и
-# стремится вниз( начинает падать вниз с ускорением) из-за сил гравитации
+# пример, мяч подброшенный в воздух, с ускорением долетает до максимальной высоты, затем останавливается и
+# стремится вниз (начинает падать вниз с ускорением) из-за сил гравитации
 gravity: int = 15
 
 
 
+# background = pygame.image.load("images/Background/pngfind.com-plants-vs-zombies-png-647251212.png")
+# scaled_background_image = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT - 500))
+# image_width = background.get_width()
+#
+# tiles = math.ceil(SCREEN_WIDTH  / image_width) + 1
+# scroll = 0
+
+
+
 while True:
+    # for i in range(0, tiles):
+    #     screen.blit(scaled_background_image, (i * image_width + scroll, 200))
+    #     scroll -= 1
+    #     if abs(scroll) > image_width:
+    #       scroll = 0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -51,9 +73,12 @@ while True:
     if pressed_keys[pygame.K_LEFT]:
         if x_position > 0:
             x_position  -= ZOMBIES_SPEED
+            BALD_ZOMBIE = BALD_ZOMBIE_LOOKS_LEFT
+
     elif pressed_keys[pygame.K_RIGHT]:
         if x_position< SCREEN_WIDTH - ZOMBIE_WIDTH:
             x_position += ZOMBIES_SPEED
+            BALD_ZOMBIE = BALD_ZOMBIE_LOOKS_RIGHT
     elif pressed_keys[pygame.K_DOWN] and not is_player_jumping:
         if y_position < SCREEN_HEIGHT - ZOMBIE_HEIGHT - FIELD:
             y_position += ZOMBIES_SPEED
@@ -71,7 +96,7 @@ while True:
 
 
 
-    screen.fill(COLOR_SKY_BLUE)
+    screen.fill(COLOR_GRASS_GREEN)
     screen.blit(BALD_ZOMBIE, (x_position, y_position))
 
     clock.tick(fps)
