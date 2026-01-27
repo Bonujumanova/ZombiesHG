@@ -1,13 +1,18 @@
 import pygame
+
+from pathlib import Path
+
 from settings import Settings
+
+
 class World:
     def __init__(self, data, screen):
         self.tile_list = []
         # load image
-        brown_platform_block = pygame.image.load("/home/bonu/Documents/zombies_hg/images/Background/platform_block.bmp")
-        dark_platform_block = pygame.image.load("/home/bonu/Documents/zombies_hg/images/Background/dark_block.bmp")
-        sun = pygame.image.load("/home/bonu/Documents/zombies_hg/images/platformer_assets/img/sun.png")
-        sky_background = pygame.image.load("/home/bonu/Documents/zombies_hg/images/platformer_assets/img/sky.png")
+        brown_platform_block = pygame.image.load(Path("/home/bonu/Documents/zombies_hg/images/Background/platform_block.bmp"))
+        dark_platform_block = pygame.image.load(Path("/home/bonu/Documents/zombies_hg/images/Background/dark_block.bmp"))
+        sun = pygame.image.load(Path("/home/bonu/Documents/zombies_hg/images/platformer_assets/img/sun.png"))
+        sky_background = pygame.image.load(Path("/home/bonu/Documents/zombies_hg/images/platformer_assets/img/sky.png"))
         self.screen = screen
         self.settings = Settings()
 
@@ -50,7 +55,9 @@ class World:
 
         for tile in self.tile_list:
             self.screen.blit(tile[0], tile[1])
-            pygame.draw.rect(self.screen, (255, 255, 255), tile[1], 2 )
+
+            # Обрамнеление элементов из списка
+            # pygame.draw.rect(self.screen, (255, 255, 255), tile[1], 2 )
 
 
 

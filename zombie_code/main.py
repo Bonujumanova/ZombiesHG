@@ -2,6 +2,8 @@ import pygame, sys
 from pygame import K_SPACE
 
 from bullet import Bullet
+# from player import Player
+from pathlib import Path
 from player import Player
 from settings import Settings
 from world_data import World
@@ -24,7 +26,7 @@ class ZombieHG:
         print(self.settings.SCREEN_HEIGHT, self.settings.SCREEN_WIDTH, "screewn h, w")
         # no FULLSCREEN
         self.screen = pygame.display.set_mode((self.settings.SCREEN_WIDTH, self.settings.SCREEN_HEIGHT))
-        self.background_image = pygame.image.load("/home/bonu/Documents/zombies_hg/images/platformer_assets/img/sky.png")
+        self.background_image = pygame.image.load(Path("/home/bonu/Documents/zombies_hg/images/platformer_assets/img/sky.png"))
         self.settings.SCREEN_WIDTH = self.screen.get_rect().width
         self.settings.SCREEN_HEIGHT = self.screen.get_rect().height
         self.world_data = World(self.settings.WORLD_DATA, self.screen)
@@ -105,8 +107,8 @@ class ZombieHG:
     def _update_screen(self):
         """Обновляет изображения на экране и отображает новый экран."""
         # При каждом проходе цикла перерисовывается экран
-        # self.screen.fill(self.settings.COLOR_SKY_BLUE)
-        # self.screen.blit(self.background_image, (0, 0))
+        self.screen.fill(self.settings.COLOR_SKY_BLUE)
+        self.screen.blit(self.background_image, (0, 0))
 
         self.world_data.blit_platform_block()
         self.player.blitme()

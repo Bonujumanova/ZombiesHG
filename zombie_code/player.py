@@ -1,4 +1,7 @@
 import pygame
+
+from pathlib import Path
+
 from settings import Settings
 from world_data import World
 
@@ -29,8 +32,6 @@ class Player:
         # Сохранение вещественной координаты центра
         self.rect.x = self.rect.x + self.settings.TILE_SIZE
         self.x = float(self.rect.x)
-        self.player_x = 0
-        self.player_y = 0
 
         # moving flag
         self.moving_right = False
@@ -55,8 +56,9 @@ class Player:
         player_running_left_images = []
         for num in range(1, 12):
         # загрузка изображения и получение прямоугольника
-            player_running_image = (pygame.image.load
-                (f'/home/bonu/Documents/zombies_hg/images/Run Throwing/0_Skeleton_Crusader_Run Throwing_{num}.bmp'))
+            player_running_image = (pygame.image.load(
+
+                Path(f'/home/bonu/Documents/zombies_hg/images/Run Throwing/0_Skeleton_Crusader_Run Throwing_{num}.bmp')))
             self.image_width = player_running_image.get_width() // 3
             self.image_height = player_running_image.get_height() // 3
 
@@ -80,7 +82,8 @@ class Player:
                 self.player_img = self.player_running_left_images[self.image_index]
 
     def player_moving_right(self):
-        if self.moving_right and self.rect.right < self.screen_rect.right - self.settings.TILE_SIZE:
+        # тут - 1 чтобы игрок плотно не подходил к краю платформы, тк происходит столкновение!
+        if self.moving_right and self.rect.right < self.screen_rect.right - self.settings.TILE_SIZE - 1:
             self.rect.x += self.settings.PLAYER_SPEED
             self.direction = 1
 
@@ -118,9 +121,6 @@ class Player:
                 #                  (150, 180, 255), self.rect, 2, 15)
                 print(f"TAIL: {tile[1][2]}")
 
-
-
-
                 self.rect.y = tile[1].y - self.image_height
 
 
@@ -129,7 +129,10 @@ class Player:
     def blitme(self):
         """ Рисует игрока в текущей позиции."""
         self.screen.blit(self.player_img, self.rect)
-        pygame.draw.rect(self.screen, (255, 255, 255), self.rect, 2)
+
+        # Обрамление игрока
+        # pygame.draw.rect(self.screen, (255, 255, 255), self.rect, 2)
+
         self.collision_check()
         print(self.rect.y, "self.rect.y")
 
