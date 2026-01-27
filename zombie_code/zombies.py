@@ -1,4 +1,5 @@
 # шаблон
+
 import math
 
 import pygame
